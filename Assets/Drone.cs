@@ -39,6 +39,7 @@ public class Drone : MonoBehaviour
 
     [Header("Collider")]
     [SerializeField]
+    protected GameObject testobj;
     protected BoxCollider areaCollider;
 
 
@@ -88,6 +89,8 @@ public class Drone : MonoBehaviour
     {
         speed = defaultSpeed;
         udpClient = new UdpClient();
+        testobj = GameObject.Find("Area");
+        areaCollider = testobj.GetComponent<Main>().getAreaCollider();
 
         if (isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, 1.0f);
     }

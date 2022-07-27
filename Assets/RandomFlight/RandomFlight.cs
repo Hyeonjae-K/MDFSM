@@ -165,6 +165,8 @@ public class RandomFlight : Drone
         prevRotY = 0;
         currRotY = 0;
 
+        Debug.Log(areaCollider);
+
 
         if (isRandomPointStart) transform.position = GetWaypoint();
 
