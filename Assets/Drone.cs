@@ -19,6 +19,8 @@ public class Drone : MonoBehaviour
     protected float startLocationY = 0;
     [SerializeField]
     protected float startLocationZ = 0;
+    [SerializeField]
+    protected float waypointHeightRange = 5;
 
 
     [Header("Accel/Rotate Values")]

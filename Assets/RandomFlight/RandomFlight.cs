@@ -66,9 +66,11 @@ public class RandomFlight : Drone
     Vector3 GetWaypoint()
     {
         Bounds bounds = areaCollider.bounds;
+        float minHeight = currentWaypoint.y - waypointHeightRange < bounds.min.y ? bounds.min.y : currentWaypoint.y - waypointHeightRange;
+        float maxHeight = currentWaypoint.y + waypointHeightRange > bounds.max.y ? bounds.max.y : currentWaypoint.y + waypointHeightRange;
         Vector3 waypoint = new Vector3(
             Random.Range(bounds.min.x, bounds.max.x),
-            Random.Range(bounds.min.y, bounds.max.y),
+            Random.Range(minHeight, maxHeight),
             Random.Range(bounds.min.z, bounds.max.z)
         );
         return waypoint;

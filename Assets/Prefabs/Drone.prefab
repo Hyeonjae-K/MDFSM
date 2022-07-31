@@ -116,8 +116,9 @@ MonoBehaviour:
   startLocationX: 0
   startLocationY: 0
   startLocationZ: 0
+  waypointHeightRange: 5
   accelerateAmount: 15
-  turningForce: 1.5
+  turningForce: 3
   zRotateMaxThreshold: 0.3
   zRotateAmount: 135
   zRotateLerpAmount: 1.5
