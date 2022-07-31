@@ -1,8 +1,5 @@
 using UnityEngine;
 
-using System.Net.Sockets;
-using System.Text;
-
 public class Drone : MonoBehaviour
 {
     [Header("Drone Settings")]
@@ -19,8 +16,6 @@ public class Drone : MonoBehaviour
     protected float startLocationY = 0;
     [SerializeField]
     protected float startLocationZ = 0;
-    [SerializeField]
-    protected float waypointHeightRange = 5;
 
 
     [Header("Accel/Rotate Values")]
@@ -45,19 +40,6 @@ public class Drone : MonoBehaviour
     protected BoxCollider areaCollider;
 
 
-    [Header("System Settings")]
-    [SerializeField]
-    protected bool isDebug = true;
-    [SerializeField]
-    bool isSend = false;
-    [SerializeField]
-    string udpHost = "127.0.0.1";
-    [SerializeField]
-    int udpPort = 7777;
-
-
-    UdpClient udpClient;
-
     // spherical coordinate
     float radius;
     float azimuth;
@@ -81,19 +63,15 @@ public class Drone : MonoBehaviour
         azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
         elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
 
-        byte[] datagram = Encoding.UTF8.GetBytes(radius + ", " + azimuth + ", " + elevation);
-        udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
-
-        if (isDebug) Debug.Log(radius + ", " + azimuth + ", " + elevation);
+        main.SendString(radius + ", " + azimuth + ", " + elevation);
     }
 
     protected virtual void Start()
     {
         speed = defaultSpeed;
-        udpClient = new UdpClient();
         main = GameObject.Find("Area").GetComponent<Main>();
         areaCollider = main.areaCollider;
 
-        if (isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, 1.0f);
+        if (main.isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, 1.0f);
     }
 }

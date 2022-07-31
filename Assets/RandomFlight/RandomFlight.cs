@@ -10,7 +10,8 @@ public class RandomFlight : Drone
     bool isRandomSpeed = true;
     [SerializeField]
     bool isRandomTurningForece = true;
-    
+    [SerializeField]
+    float waypointHeightRange = 5;
 
     // speed & rotate settings
     float targetSpeed;
@@ -83,7 +84,7 @@ public class RandomFlight : Drone
         currentWaypoint = GetWaypoint();
 
         // 생성한 좌표에 cube 오브젝트 생성 (동작 확인용)
-        if (isDebug)
+        if (main.isDebug)
         {
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = currentWaypoint;

@@ -1,6 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+using System.Net.Sockets;
+using System.Text;
 
 public class Main : MonoBehaviour
 {
@@ -13,28 +14,38 @@ public class Main : MonoBehaviour
     int droneCnt = 3;
     public GameObject dronePrefab;
 
+    [Header("System Settings")]
+    [SerializeField]
+    public bool isDebug = true;
+    [SerializeField]
+    public bool isSend = false;
+    [SerializeField]
+    string udpHost = "127.0.0.1";
+    [SerializeField]
+    int udpPort = 7777;
 
-    public BoxCollider getAreaCollider()
+    UdpClient udpClient;
+
+
+    // 문자열을 전달받아 udp로 전송
+    public void SendString(string message)
     {
-        return areaCollider;
+        byte[] datagram = Encoding.UTF8.GetBytes(message);
+        udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
+
+        if (isDebug) Debug.Log(message);
     }
+
 
     // Start is called before the first frame update
     void Start()
     {
         areaCollider = gameObject.GetComponent<BoxCollider>();
-
-        // Instantiate(dronePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        udpClient = new UdpClient();
 
         for (int i = 0; i < droneCnt; i++)
         {
             Instantiate(dronePrefab, new Vector3(0, 0, 0), Quaternion.identity);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
