@@ -16,7 +16,6 @@ public class Main : MonoBehaviour
 
     public BoxCollider getAreaCollider()
     {
-        Debug.Log(areaCollider);
         return areaCollider;
     }
 
