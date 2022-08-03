@@ -63,7 +63,9 @@ public class Drone : MonoBehaviour
         azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
         elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
 
-        main.SendString(radius + ", " + azimuth + ", " + elevation);
+        string name = gameObject.name;
+
+        main.SendString(name + ": " + radius + ", " + azimuth + ", " + elevation);
     }
 
     protected virtual void Start()

@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2769477029434776816}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.81, y: 2.66, z: -0.02163601}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,17 +116,13 @@ MonoBehaviour:
   startLocationX: 0
   startLocationY: 0
   startLocationZ: 0
-  waypointHeightRange: 5
   accelerateAmount: 15
   turningForce: 3
   zRotateMaxThreshold: 0.3
   zRotateAmount: 135
   zRotateLerpAmount: 1.5
-  testobj: {fileID: 4322901264506250975, guid: 40b5e1a48eba5444da4ee2259736fc78, type: 3}
-  isDebug: 1
-  isSend: 0
-  udpHost: 127.0.0.1
-  udpPort: 7777
+  main: {fileID: 0}
   isRandomPointStart: 1
   isRandomSpeed: 1
   isRandomTurningForece: 1
+  waypointHeightRange: 5
