@@ -23,6 +23,8 @@ public class Main : MonoBehaviour
     string udpHost = "127.0.0.1";
     [SerializeField]
     int udpPort = 7777;
+    [SerializeField]
+    public float udpPeriod = 0.3f;
 
     UdpClient udpClient;
 
@@ -30,6 +32,7 @@ public class Main : MonoBehaviour
     // 문자열을 전달받아 udp로 전송
     public void SendString(string message)
     {
+
         byte[] datagram = Encoding.UTF8.GetBytes(message);
         udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
 

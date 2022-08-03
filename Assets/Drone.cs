@@ -72,6 +72,6 @@ public class Drone : MonoBehaviour
         main = GameObject.Find("Area").GetComponent<Main>();
         areaCollider = main.areaCollider;
 
-        if (main.isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, 1.0f);
+        if (main.isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, main.udpPeriod);
     }
 }
