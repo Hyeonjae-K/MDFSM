@@ -51,11 +51,12 @@ public class Main : MonoBehaviour
     void Start()
     {
         areaCollider = gameObject.GetComponent<BoxCollider>();
+        // areaCollider.center = transform.position;
         udpClient = new UdpClient();
 
         for (int i = 0; i < droneCnt; i++)
         {
-            GameObject drone1 = Instantiate(dronePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            GameObject drone1 = Instantiate(dronePrefab, transform.position, Quaternion.identity);
             drone1.name = "drone " + i.ToString();
         }
     }

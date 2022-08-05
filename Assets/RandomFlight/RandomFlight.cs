@@ -11,7 +11,7 @@ public class RandomFlight : Drone
     [SerializeField]
     bool isRandomTurningForece = true;
     [SerializeField]
-    float waypointHeightRange = 5;
+    float waypointHeightRange = 15;
 
     // speed & rotate settings
     float targetSpeed;
@@ -168,6 +168,7 @@ public class RandomFlight : Drone
         prevRotY = 0;
         currRotY = 0;
 
+        currentWaypoint = main.transform.position;
         if (isRandomPointStart) transform.position = GetWaypoint();
 
         UpdateWaypoint();

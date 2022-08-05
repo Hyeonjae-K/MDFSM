@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2769477029434776820}
   - component: {fileID: 2769477029434776821}
   - component: {fileID: 2769477029434776818}
-  - component: {fileID: 2769477029434776819}
+  - component: {fileID: 4961140016190250400}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2769477029434776819
+--- !u!114 &4961140016190250400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
   startLocationY: 0
   startLocationZ: 0
   accelerateAmount: 15
-  turningForce: 3
+  turningForce: 1.5
   zRotateMaxThreshold: 0.3
   zRotateAmount: 135
   zRotateLerpAmount: 1.5
@@ -125,4 +125,4 @@ MonoBehaviour:
   isRandomPointStart: 1
   isRandomSpeed: 1
   isRandomTurningForece: 1
-  waypointHeightRange: 5
+  waypointHeightRange: 15
