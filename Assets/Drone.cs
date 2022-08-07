@@ -40,12 +40,6 @@ public class Drone : MonoBehaviour
     protected BoxCollider areaCollider;
 
 
-    // spherical coordinate
-    float radius;
-    float azimuth;
-    float elevation;
-
-
     // 3차원 벡터를 입력받아 해당 위치로 이동
     // 입력값이 없을 경우 startLocation으로 이동
     protected void SetLocation(Vector3? location = null)
@@ -55,25 +49,11 @@ public class Drone : MonoBehaviour
         else transform.position = (Vector3)location;
     }
 
-    // 3차원 벡터를 구 좌표로 변환하여 udp로 전송
-    void SendSphericalCoordinate()
-    {
-        var pos = transform.localPosition;
-        radius = pos.magnitude;
-        azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
-        elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
-
-        string name = gameObject.name;
-
-        main.SendString(name + ": " + radius + ", " + azimuth + ", " + elevation);
-    }
 
     protected virtual void Start()
     {
         speed = defaultSpeed;
         main = GameObject.Find("Area").GetComponent<Main>();
         areaCollider = main.areaCollider;
-
-        if (main.isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, main.udpPeriod);
     }
 }

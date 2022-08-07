@@ -2,6 +2,8 @@ using UnityEngine;
 
 using System.Net.Sockets;
 using System.Text;
+using System.Collections.Generic;
+using System;
 
 public class Main : MonoBehaviour
 {
@@ -36,6 +38,8 @@ public class Main : MonoBehaviour
 
     UdpClient udpClient;
 
+    List<GameObject> drones = new List<GameObject>();
+
 
     // 문자열을 전달받아 udp로 전송
     public void SendString(string message)
@@ -46,18 +50,58 @@ public class Main : MonoBehaviour
         if (isDebug) Debug.Log(message);
     }
 
+    // 3차원 벡터를 구 좌표로 변환하여 udp로 전송
+    void SendSphericalCoordinate()
+    {
+        string message = "{[";
+        string jsonForm = "{{\"id\": {0}, \"radius\": {1}, \"azimuth\": {2}, \"elevation\": {3}}}";
+        byte[] datagram;
+
+        for (int i=0; i<drones.Count; i++)
+        {
+            string name = drones[i].name;
+
+            var pos = drones[i].transform.position;
+            float radius = pos.magnitude;
+            float azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
+            float elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
+
+            message += String.Format(jsonForm, name, radius, azimuth, elevation);
+            if ((i+1) % 50 == 0)
+            {
+                message += "]}";
+
+                datagram = Encoding.UTF8.GetBytes(message);
+                udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
+                message = "{[";
+
+                if (isDebug) Debug.Log(message);
+            }
+        }
+        message += "]}";
+
+        if (message.Length > 5) { 
+            datagram = Encoding.UTF8.GetBytes(message);
+            udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
+        }
+
+        if (isDebug) Debug.Log(message);
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
         areaCollider = gameObject.GetComponent<BoxCollider>();
-        // areaCollider.center = transform.position;
         udpClient = new UdpClient();
 
         for (int i = 0; i < droneCnt; i++)
         {
-            GameObject drone1 = Instantiate(dronePrefab, transform.position, Quaternion.identity);
-            drone1.name = "drone " + i.ToString();
+            GameObject drone = Instantiate(dronePrefab, transform.position, Quaternion.identity);
+            drone.name = "drone " + i.ToString();
+            drones.Add(drone);
         }
+
+        if (isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, udpPeriod);
     }
 }
