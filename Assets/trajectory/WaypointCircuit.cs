@@ -13,28 +13,37 @@ public class WaypointCircuit : Waypoint
     /// Specify is the waypoint is a WaypointCircuit or a CinglePoint
     /// </summary>
     /// <returns>Returns always TRUE</returns>
-    public override bool isCircuit() { return true; } //get
+    public override bool isCircuit() { return true; }
 
-    public GameObject waypointCircuitSinglePoint; //get
+    public GameObject waypointCircuitSinglePoint;
 
-    public WaypointList waypointList = new WaypointList(); //get
-    private int numPoints; //get
+    public WaypointList waypointList = new WaypointList();
+    private int numPoints;
     private Vector3[] points;
-    private float[] distances; // get
+    private float[] distances;
 
-    public float editorVisualisationSubsteps = 50; // get
+    public float editorVisualisationSubsteps = 100;
     public float Length { get; private set; }
 
-    int actualChildrenIndx = 2; //get
-    int minChildrenIndx = 0; //get
+    int actualChildrenIndx = 2;
+    int minChildrenIndx = 0;
 
-    const int digitsNumber = 3; //get
+    const int digitsNumber = 3;
     /// <summary>
     /// Given a number, returns it in a string of prefixed number of digits
     /// </summary>
     /// <param name="number">Number to be converted in string</param>
     /// <returns>Returns a string of prefixed number of digits containing the number passed as argument</returns>
-    string toStringOfXdigits(int number) //get
+
+	[Range(0, 200)]
+	public int quality = 10; //waypoint to waypoint 의 좌표간 보조좌표 개수
+	public GameObject sphere; //좌표 가시화 도구
+
+	GameObject[] spheres = new GameObject[1000]; //좌표 생성간 오차발생에 대한 예비 좌표값들
+	Vector3[] point;
+
+
+    string toStringOfXdigits(int number)
     {
         String tmp = "";
         int k = digitsNumber - 1;
@@ -52,30 +61,30 @@ public class WaypointCircuit : Waypoint
     /// Adds a point to the circuit
     /// </summary>
     /// <param name="pt">Points that has to be added</param>
-    public void addPointAtTheEndOfTheCircuit(Vector3 pt) { //get
+    public void addPointAtTheEndOfTheCircuit(Vector3 pt) {
         //Debug.Log("added point at pos:" + pt.ToString());
         GameObject g = (GameObject)Instantiate(waypointCircuitSinglePoint, pt, Quaternion.identity);
         g.name = "Waypoint " + toStringOfXdigits(actualChildrenIndx++);
         g.transform.parent = this.transform;
+		debug.log(waypointCircuitSinglePoint);
+		debug.log(g.name);
         //updatePointsList();
-		//Debug.Log(waypointCircuitSinglePoint);
-		//Debug.Log(g.name);
-    }
 
+    }
+	
     /// <summary>
     /// Remove the oldest (first) point in the cirucuit
     /// </summary>
-    public void cleanOldestWaypoint() //err
+    public void cleanOldestWaypoint()
     {
         Destroy(transform.Find("Waypoint " + toStringOfXdigits(minChildrenIndx++)).gameObject);
-        updatePointsList();
-		//Debug.Log(transform.Find("Waypoint " + toStringOfXdigits(minChildrenIndx++)).gameObject);
+        //updatePointsList();
     }
 
     /// <summary>
     /// Checks the points that compose the circuit and update the data structure containing them
     /// </summary>
-    void updatePointsList()  //get
+    void updatePointsList()
     {
         var children = new Transform[transform.childCount];
         int n = 0;
@@ -88,14 +97,13 @@ public class WaypointCircuit : Waypoint
         for (n = 0; n < children.Length; ++n)
         {
             waypointList.items[n] = children[n];
-			
         }
     }
 
-    // public Transform S1;
-    // public Transform S2;
-    // public Transform S3;
-    // public Transform S4;
+    public Transform S1;
+    public Transform S2;
+    public Transform S3;
+    public Transform S4;
 
     /// <summary>
     /// Given two points that can be inside or outside the circuit, the function returns a number 'nPoints' of points
@@ -105,7 +113,7 @@ public class WaypointCircuit : Waypoint
     /// <param name="pt2">Second point</param>
     /// <param name="nOfPoints">Number of points needed to extract</param>
     /// <returns>It is a single point so it'll always return an empty array of points </returns>
-    public override Vector3[] pointsBetween(Vector3 pt1, Vector3 pt2, int nPoints) //err
+    public override Vector3[] pointsBetween(Vector3 pt1, Vector3 pt2, int nPoints)
     {
         //CachePositionsAndDistances();
         Length = distances[distances.Length - 1];
@@ -130,18 +138,16 @@ public class WaypointCircuit : Waypoint
         float step = distanceBetweenPoints / nPoints;
         Vector3[] POINTS = new Vector3[nPoints + 2];
 
-        for (int i = 0; i < POINTS.Length; i++){
+        for (int i = 0; i < POINTS.Length; i++)
             POINTS[i] = GetRoutePosition((dPt1 + step * (i +1)) % Length);
-			Debug.Log(i);
-			Debug.Log(POINTS[i]);
-		}
+
         return POINTS;        
     }
 
     /// <summary>
     /// Comparer for check distances in ray cast hits
     /// </summary>
-    public class TransformNameComparer : IComparer // get 
+    public class TransformNameComparer : IComparer
     {
         public int Compare(object x, object y)
         {
@@ -153,9 +159,9 @@ public class WaypointCircuit : Waypoint
     /// Gets the total length of the circuit
     /// </summary>
     /// <returns>Returns the total length of the circuit</returns>
-    public float getTotalLengthOfCircuit() { if (distances.Length > 0) return distances[distances.Length - 1]; else return 0; } // get
+    public float getTotalLengthOfCircuit() { if (distances.Length > 0) return distances[distances.Length - 1]; else return 0; }
 
-    public Transform[] Waypoints // get
+    public Transform[] Waypoints
     {
         get { updatePointsList(); return waypointList.items; }
     }
@@ -183,14 +189,14 @@ public class WaypointCircuit : Waypoint
             CachePositionsAndDistances();
         }
         numPoints = Waypoints.Length;
-    } // get
+    }
 
     /// <summary>
     /// Given an absolute distance from the first point, it returns a RoutePoint at that distance
     /// </summary>
     /// <param name="distance">Float containing the distance from the first point</param>
     /// <returns>A routePoint containing the position and the direction of the resulting point </returns>
-    public override RoutePoint GetRoutePoint(float dist) //get
+    public override RoutePoint GetRoutePoint(float dist)
     {
         // position and direction
         Vector3 p1 = GetRoutePosition(dist);
@@ -204,7 +210,7 @@ public class WaypointCircuit : Waypoint
     /// </summary>
     /// <param name="progressDistance">Float containing the distance from the first point</param>
     /// <returns>It is a single point, so it'll return the SinglePoint position</returns>
-    public override Vector3 GetRoutePosition(float dist) //get
+    public override Vector3 GetRoutePosition(float dist)
     {
         int point = 0;
 
@@ -255,7 +261,7 @@ public class WaypointCircuit : Waypoint
     /// </summary>
     /// <param name="position">Point we use to look for the nearest point in the circuit</param>
     /// <returns>The nearest point to the one passed as parameter, in the circuit</returns>
-    public override float getNearestPointTo(Vector3 position) //get
+    public override float getNearestPointTo(Vector3 position)
     {
         Length = distances[distances.Length - 1];
         float dPt = 0;
@@ -272,7 +278,7 @@ public class WaypointCircuit : Waypoint
     /// <summary>
     /// Catmull-Rom equation to obtain a spline. More details in the documentation
     /// </summary>
-    private Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float i) //get
+    private Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float i)
     {
         return 0.5f*
                 ((2*p1) + (-p0 + p2)*i + (2*p0 - 5*p1 + 4*p2 - p3)*i*i +
@@ -283,7 +289,7 @@ public class WaypointCircuit : Waypoint
     /// Transfers the position of each point and distances between points to arrays for
     /// speed of lookup at runtime
     /// </summary>
-    private void CachePositionsAndDistances()   //dist 찾기1 // get
+    private void CachePositionsAndDistances()
     {
 
         points = new Vector3[Waypoints.Length + 1];
@@ -344,7 +350,7 @@ public class WaypointCircuit : Waypoint
 
 
     [Serializable]
-    public class WaypointList // get
+    public class WaypointList
     {
         public WaypointCircuit circuit;
         public Transform[] items = new Transform[0];
