@@ -28,8 +28,8 @@ public class FollowerController : MonoBehaviour
     // 리더드론의 이동 함수를 복사해 실행하는 함수
     void CopyMove()
     {
-        leader.GetComponent<RandomFlight>().Rotate(gameObject);
-        leader.GetComponent<RandomFlight>().Move(gameObject);
+        leader.GetComponent<Drone>().Rotate(gameObject);
+        leader.GetComponent<Drone>().Move(gameObject);
     }
 
     //해당 좌표로 이동하는 함수
