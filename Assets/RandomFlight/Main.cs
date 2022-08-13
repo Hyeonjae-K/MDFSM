@@ -51,20 +51,12 @@ public class Main : MonoBehaviour
 
     List<GameObject> drones = new List<GameObject>();
 
-    // 문자열을 전달받아 udp로 전송
-    public void SendString(string message)
-    {
-        byte[] datagram = Encoding.UTF8.GetBytes(message);
-        udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
-
-        if (isDebug) Debug.Log(message);
-    }
-
     // 3차원 벡터를 구 좌표로 변환하여 udp로 전송
     void SendSphericalCoordinate()
     {
-        string message = "{[";
-        string jsonForm = "{{\"id\": {0}, \"radius\": {1}, \"azimuth\": {2}, \"elevation\": {3}}}";
+        string message = "[";
+        // id, radius, azimuth, elevation
+        string format = "({0}, {1:F2}, {2:F2}, {3:F2})";
         byte[] datagram;
 
         for (int i = 0; i < drones.Count; i++)
@@ -76,25 +68,15 @@ public class Main : MonoBehaviour
             float azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
             float elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
 
-            message += String.Format(jsonForm, name, radius, azimuth, elevation);
-            if ((i + 1) % 50 == 0)
-            {
-                message += "]}";
+            Debug.Log(String.Format(format, name, radius, azimuth, elevation));
+            message += String.Format(format, name, radius, azimuth, elevation);
 
-                datagram = Encoding.UTF8.GetBytes(message);
-                udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
-                message = "{[";
-
-                if (isDebug) Debug.Log(message);
-            }
+            if (i + 1 < drones.Count) message += ", ";
         }
-        message += "]}";
+        message += "]";
 
-        if (message.Length > 5)
-        {
-            datagram = Encoding.UTF8.GetBytes(message);
-            udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
-        }
+        datagram = Encoding.UTF8.GetBytes(message);
+        udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
 
         if (isDebug) Debug.Log(message);
     }
@@ -111,18 +93,17 @@ public class Main : MonoBehaviour
             for (int i = 0; i < droneCnt; i++)
             {
                 GameObject drone = Instantiate(dronePrefab, transform.position, Quaternion.identity);
-                drone.name = "drone " + i.ToString();
+                drone.name = String.Format("{0:D3}", i);
                 drones.Add(drone);
             }
         }
         else
         {
-            GameObject trajectory = Instantiate(trajectoryPrefab, transform.position, Quaternion.identity);
-            spline = trajectory.GetComponent<spline>();
-            spline.points = trajectoryPoints;
-            spline.quality = trajectoryQuality;
+            GameObject drone = Instantiate(trajectoryPrefab, transform.position, Quaternion.identity);
+            drone.name = String.Format("{0:D3}", 1);
+            drones.Add(drone);
         }
 
-        if (isSend) InvokeRepeating("SendSphericalCoordinate", 0.0f, udpPeriod);
+        if (isSend) InvokeRepeating("SendSphericalCoordinate", 1.0f, udpPeriod);
     }
 }

@@ -295,34 +295,40 @@ public class spline : MonoBehaviour {
 	
 	//=================================================== ref
 
-	public Vector3[] Update ()
-	{
-		// float time = 1;
-		for (int i = 0; i < spheres.Length; i++) { //기존 좌표값들이 변함에 따라 spline이 변하므로 변화에 따른 기존 spline 보조 좌표들을 삭제  삭제하지 않으면 객체들이 계속해서 생겨나 overflow 발생 (
-			Destroy(spheres[i]);
-			// Destroy(transform.Find("Waypoint " + toStringOfXdigits(minChildrenIndx++)).gameObject);
-			// updatePointsList();
-			// Destroy(spheres[i],time);
-			
-		}
-		
-		point = mathPlus.CreateCatmullSpline (points, quality, true);
-		// Debug.Log(points);
+	public Vector3[] GetTrajectoryWaypoints(Vector3[] points, int quality)
+    {
+		point = mathPlus.CreateCatmullSpline(points, quality, true);
 
-
-		for (int i = 0; i < point.Length; i++) { //객체 생성을 위한 코드 ( 굳이 없어도 됨 (가시화 작업을 위한 도구 -> ray나 line으로 만들 방법 생각 필요))
-			GameObject newSpehere = GameObject.Instantiate (sphere, new Vector3 (point [i].x, point [i].y, point [i].z), Quaternion.identity) as GameObject;
-			// Debug.Log(point [i].x); // 좌표값들 반환(x,y,z)
-			// Debug.Log(point [i].y);
-			// Debug.Log(point [i].z);
-			Debug.LogFormat("x{0} : {1}, y{2} : {3}, z{4} : {5}", i, point[i].x, i, point[i].y, i, point[i].z);
-			spheres [i] = newSpehere; //변화에 따른 보조 좌표들이 지워짐에 따라 다시 메울 객체들 담아놓기
-		}								// quaternion -> direction + rotation https://docs.unity3d.com/ScriptReference/Quaternion.html
-
-		// print(point);
 		return point;
-		// Debug.Log(point [i].x, point [i].y, point [i].z);
-	}
+    } 
+	//public Vector3[] Update ()
+	//{
+	//	// float time = 1;
+	//	for (int i = 0; i < spheres.Length; i++) { //기존 좌표값들이 변함에 따라 spline이 변하므로 변화에 따른 기존 spline 보조 좌표들을 삭제  삭제하지 않으면 객체들이 계속해서 생겨나 overflow 발생 (
+	//		Destroy(spheres[i]);
+	//		// Destroy(transform.Find("Waypoint " + toStringOfXdigits(minChildrenIndx++)).gameObject);
+	//		// updatePointsList();
+	//		// Destroy(spheres[i],time);
+			
+	//	}
+		
+	//	point = mathPlus.CreateCatmullSpline (points, quality, true);
+	//	// Debug.Log(points);
+
+
+	//	for (int i = 0; i < point.Length; i++) { //객체 생성을 위한 코드 ( 굳이 없어도 됨 (가시화 작업을 위한 도구 -> ray나 line으로 만들 방법 생각 필요))
+	//		GameObject newSpehere = GameObject.Instantiate (sphere, new Vector3 (point [i].x, point [i].y, point [i].z), Quaternion.identity) as GameObject;
+	//		// Debug.Log(point [i].x); // 좌표값들 반환(x,y,z)
+	//		// Debug.Log(point [i].y);
+	//		// Debug.Log(point [i].z);
+	//		Debug.LogFormat("x{0} : {1}, y{2} : {3}, z{4} : {5}", i, point[i].x, i, point[i].y, i, point[i].z);
+	//		spheres [i] = newSpehere; //변화에 따른 보조 좌표들이 지워짐에 따라 다시 메울 객체들 담아놓기
+	//	}								// quaternion -> direction + rotation https://docs.unity3d.com/ScriptReference/Quaternion.html
+
+	//	// print(point);
+	//	return point;
+	//	// Debug.Log(point [i].x, point [i].y, point [i].z);
+	//}
 }
 // namespace UnityStandardAssets.Utility.Inspector
 // {
