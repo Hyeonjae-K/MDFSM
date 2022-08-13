@@ -20,6 +20,15 @@ public class SettingController : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
+    public void ExitScene()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     public void ChangeDronecnt()
     {
         SettingsData.setting_dronecnt = int.Parse(dronecntInput.text);
