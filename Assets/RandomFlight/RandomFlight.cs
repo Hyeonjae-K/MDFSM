@@ -115,7 +115,7 @@ public class RandomFlight : Drone
     }
 
     // waypoint 방향으로 비행체 회전 함수
-    void Rotate()
+    public void Rotate(GameObject mainObject)
     {
         if (currentWaypoint == Vector3.zero)
             return;
@@ -133,7 +133,7 @@ public class RandomFlight : Drone
             eulerAngle.z += zRotateValue * zRotateAmount;
             lookRotation = Quaternion.Euler(eulerAngle);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, lerpAmount);
+            mainObject.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, lerpAmount);
         }
     }
 
@@ -151,15 +151,16 @@ public class RandomFlight : Drone
     }
 
     // 비행체 이동 함수
-    void Move()
+    public void Move(GameObject mainObject)
     {
-        transform.Translate(new Vector3(0, 0, speed) * Time.deltaTime);
+        mainObject.transform.Translate(new Vector3(0, 0, speed) * Time.deltaTime);
     }
 
 
     protected override void Start()
     {
         base.Start();
+        targetSpeed = defaultSpeed;
         targetSpeed = defaultSpeed;
 
         currentTurningForce = turningForce;
@@ -169,7 +170,7 @@ public class RandomFlight : Drone
         currRotY = 0;
 
         currentWaypoint = main.transform.position;
-        if (isRandomPointStart) transform.position = GetWaypoint();
+        if (isRandomPointStart && !main.isCluster) transform.position = GetWaypoint();
 
         UpdateWaypoint();
     }
@@ -178,10 +179,10 @@ public class RandomFlight : Drone
     {
         CheckWaypoint();
         ZAxisRotate();
-        Rotate();
+        Rotate(gameObject);
 
         if (isRandomSpeed) RandomizeSpeed();
         if (isRandomTurningForece) RandomizeTurn();
-        Move();
+        Move(gameObject);
     }
 }
