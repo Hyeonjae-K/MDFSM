@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrajectoryFlight : Drone
 {
-	Vector3[] points;
+    Vector3[] points;
     int idx = 0;
 
     Vector3 GetWaypoint()
@@ -21,7 +21,7 @@ public class TrajectoryFlight : Drone
 
         points = new spline().GetTrajectoryWaypoints(main.trajectoryPoints, main.trajectoryQuality);
 
-		currentWaypoint = points[1];
+        currentWaypoint = points[1];
 
         SetLocation(points[0]);
     }

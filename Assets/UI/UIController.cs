@@ -7,23 +7,13 @@ public class UIController : MonoBehaviour
 {
     private bool paused = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // æ¿ ¿¸»Ø
     public void Restart()
     {
         SceneManager.LoadScene("Settings");
     }
 
+    // Ω√∞£¿ª ∏ÿ√Áº≠ ¿œΩ√¡§¡ˆ
     public void Pause()
     {
         if (paused)

@@ -257,7 +257,7 @@ public class spline : MonoBehaviour {
 		}
 		numPoints = Waypoints.Length;
 	}
-	
+
 	// private void OnDrawGizmos()
 	// {
 	// 	DrawGizmos(false);
@@ -280,7 +280,7 @@ public class spline : MonoBehaviour {
 	//
 	// 		Gizmos.color = selected ? Color.green : Color.green;  //new Color(1, 1, 0, 0.5f);
 	// 		Vector3 prev = Waypoints[0].position;
- //                    
+	//                    
 	// 		for (float dist = 0; dist < Length; dist += Length/editorVisualisationSubsteps)
 	// 		{
 	// 			Vector3 next = GetRoutePosition(dist + 1);
@@ -288,19 +288,19 @@ public class spline : MonoBehaviour {
 	// 			prev = next;
 	// 		}
 	// 		Gizmos.DrawLine(prev, Waypoints[0].position);            
- //            
+	//            
 	// 	}
 	// }
-	
-	
+
+
 	//=================================================== ref
 
 	public Vector3[] GetTrajectoryWaypoints(Vector3[] points, int quality)
-    {
+	{
 		point = mathPlus.CreateCatmullSpline(points, quality, true);
 
 		return point;
-    } 
+	}
 	//public Vector3[] Update ()
 	//{
 	//	// float time = 1;
@@ -309,21 +309,21 @@ public class spline : MonoBehaviour {
 	//		// Destroy(transform.Find("Waypoint " + toStringOfXdigits(minChildrenIndx++)).gameObject);
 	//		// updatePointsList();
 	//		// Destroy(spheres[i],time);
-			
-	//	}
-		
+
+	//}
+
 	//	point = mathPlus.CreateCatmullSpline (points, quality, true);
 	//	// Debug.Log(points);
 
 
-	//	for (int i = 0; i < point.Length; i++) { //객체 생성을 위한 코드 ( 굳이 없어도 됨 (가시화 작업을 위한 도구 -> ray나 line으로 만들 방법 생각 필요))
-	//		GameObject newSpehere = GameObject.Instantiate (sphere, new Vector3 (point [i].x, point [i].y, point [i].z), Quaternion.identity) as GameObject;
-	//		// Debug.Log(point [i].x); // 좌표값들 반환(x,y,z)
-	//		// Debug.Log(point [i].y);
-	//		// Debug.Log(point [i].z);
-	//		Debug.LogFormat("x{0} : {1}, y{2} : {3}, z{4} : {5}", i, point[i].x, i, point[i].y, i, point[i].z);
-	//		spheres [i] = newSpehere; //변화에 따른 보조 좌표들이 지워짐에 따라 다시 메울 객체들 담아놓기
-	//	}								// quaternion -> direction + rotation https://docs.unity3d.com/ScriptReference/Quaternion.html
+		//for (int i = 0; i < point.Length; i++) { //객체 생성을 위한 코드 ( 굳이 없어도 됨 (가시화 작업을 위한 도구 -> ray나 line으로 만들 방법 생각 필요))
+		//	GameObject newSpehere = GameObject.Instantiate (sphere, new Vector3 (point [i].x, point [i].y, point [i].z), Quaternion.identity) as GameObject;
+		//	// Debug.Log(point [i].x); // 좌표값들 반환(x,y,z)
+		//	// Debug.Log(point [i].y);
+		//	// Debug.Log(point [i].z);
+		//	Debug.LogFormat("x{0} : {1}, y{2} : {3}, z{4} : {5}", i, point[i].x, i, point[i].y, i, point[i].z);
+		//	spheres [i] = newSpehere; //변화에 따른 보조 좌표들이 지워짐에 따라 다시 메울 객체들 담아놓기
+		//}								// quaternion -> direction + rotation https://docs.unity3d.com/ScriptReference/Quaternion.html
 
 	//	// print(point);
 	//	return point;

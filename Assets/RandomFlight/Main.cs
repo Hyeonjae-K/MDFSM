@@ -10,7 +10,7 @@ public class Main : MonoBehaviour
     [Header("Collider")]
     [SerializeField]
     public BoxCollider areaCollider;
-     
+
 
     [Header("Drone Count Setting")]
     [SerializeField]
@@ -91,6 +91,8 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        LoadSettings();
+
         // 비행 가능 범위 초기화
         areaCollider = gameObject.GetComponent<BoxCollider>();
         // UDP 통신을 위한 클래스 인스턴스화
@@ -119,5 +121,23 @@ public class Main : MonoBehaviour
 
         // 입력받은 udpPeriod를 주기로 드론의 좌표를 전송 (스케줄링)
         if (isSend) InvokeRepeating("SendSphericalCoordinate", 1.0f, udpPeriod);
+    }
+
+    // Setting 로드 함수
+    void LoadSettings()
+    {
+        droneCnt = SettingsData.setting_dronecnt;
+        trajectoryQuality = SettingsData.setting_trajectoryquality;
+        clusterSize = SettingsData.setting_clustersize;
+        clusterRange = SettingsData.setting_clusterrange;
+        isTrajectory = SettingsData.setting_istrajectory;
+        isCluster = SettingsData.setting_iscluster;
+        isDebug = SettingsData.setting_isdebug;
+        isSend = SettingsData.setting_issend;
+        udpHost = SettingsData.setting_udphost;
+        udpPort = SettingsData.setting_udpport;
+        udpPeriod = SettingsData.setting_udpperiod;
+
+        trajectoryPoints = SettingsData.setting_trajectoryPoints;
     }
 }

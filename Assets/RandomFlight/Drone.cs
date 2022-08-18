@@ -88,6 +88,7 @@ public class Drone : MonoBehaviour
         {
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = currentWaypoint;
+            cube.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             Debug.Log(currentWaypoint);
         }
 
@@ -164,6 +165,7 @@ public class Drone : MonoBehaviour
         main = GameObject.Find("Area").GetComponent<Main>();
         areaCollider = main.areaCollider;
 
+        // 군집 비행 생성
         if (main.isCluster)
         {
             for (int i = 0; i < main.clusterSize; i++)

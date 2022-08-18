@@ -51,7 +51,7 @@ public class SimpleCamera : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     void Update()
