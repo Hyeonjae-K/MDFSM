@@ -74,7 +74,6 @@ public class Drone : MonoBehaviour
 
         spawnpoint = (spawnpoint * r) + transform.position;
 
-        Debug.Log("spawn: " + spawnpoint);
         return spawnpoint;
     }
 
@@ -171,7 +170,6 @@ public class Drone : MonoBehaviour
             {
                 GameObject clust_drone = Instantiate(main.clusterDronePrefab, ClusterPoint(main.clusterRange), Quaternion.identity);
 
-                Debug.Log("drone:" + gameObject.transform.position);
                 clust_drone.name = "clust_" + gameObject.name;
             }
         }

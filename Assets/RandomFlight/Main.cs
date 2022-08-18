@@ -51,33 +51,39 @@ public class Main : MonoBehaviour
 
     List<GameObject> drones = new List<GameObject>();
 
+
     // 3차원 벡터를 구 좌표로 변환하여 udp로 전송
     void SendSphericalCoordinate()
     {
+        // 메시지 저장을 위한 변수
         string message = "[";
-        // id, radius, azimuth, elevation
+        // 메시지 포맷. 각 위치에 (id, radius, azimuth, elevation)이 담김
         string format = "({0}, {1:F2}, {2:F2}, {3:F2})";
         byte[] datagram;
 
+        // 생성된 드론의 수 만큼 반복문 실행
         for (int i = 0; i < drones.Count; i++)
         {
             string name = drones[i].name;
 
+            // 드론의 좌표를 구 좌표계로 변환
             var pos = drones[i].transform.position;
             float radius = pos.magnitude;
             float azimuth = Mathf.Atan2(pos.z, pos.x) * Mathf.Rad2Deg;
             float elevation = Mathf.Acos(pos.y / radius) * Mathf.Rad2Deg;
 
-            Debug.Log(String.Format(format, name, radius, azimuth, elevation));
+            // 메시지에 좌표를 담음
             message += String.Format(format, name, radius, azimuth, elevation);
 
             if (i + 1 < drones.Count) message += ", ";
         }
         message += "]";
 
+        // 메시지 전송
         datagram = Encoding.UTF8.GetBytes(message);
         udpClient.Send(datagram, datagram.Length, udpHost, udpPort);
 
+        // 디버그 모드일 경우 메시지를 로그에 출력
         if (isDebug) Debug.Log(message);
     }
 
@@ -85,11 +91,17 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 비행 가능 범위 초기화
         areaCollider = gameObject.GetComponent<BoxCollider>();
+        // UDP 통신을 위한 클래스 인스턴스화
         udpClient = new UdpClient();
 
+        // 랜덤비행
         if (!isTrajectory)
         {
+            // 입력받은 droneCnt만큼 드론을 생성
+            // 드론의 좌표를 읽어 udp로 전송하기 위해
+            // 각 드론의 이름을 id로 설정하여 배열에 저장
             for (int i = 0; i < droneCnt; i++)
             {
                 GameObject drone = Instantiate(dronePrefab, transform.position, Quaternion.identity);
@@ -97,6 +109,7 @@ public class Main : MonoBehaviour
                 drones.Add(drone);
             }
         }
+        // 궤적비행
         else
         {
             GameObject drone = Instantiate(trajectoryPrefab, transform.position, Quaternion.identity);
@@ -104,6 +117,7 @@ public class Main : MonoBehaviour
             drones.Add(drone);
         }
 
+        // 입력받은 udpPeriod를 주기로 드론의 좌표를 전송 (스케줄링)
         if (isSend) InvokeRepeating("SendSphericalCoordinate", 1.0f, udpPeriod);
     }
 }
